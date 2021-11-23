@@ -23,7 +23,7 @@ object Main {
     println("Done. \n")
 
     println("Data transformation... \n")
-    TransformData.run(spark, path)
+    TransformData.getBestTeams(spark, path)
     println("Done. \n")
 
   }

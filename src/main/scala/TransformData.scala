@@ -1,18 +1,22 @@
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
+import org.apache.spark.sql.functions.{col, max}
 
 object TransformData {
 
-  def run(sparkSession: SparkSession, path: String): Unit ={
+  /*
+   * Function to obtain the 5 best teams
+   */
+  def getBestTeams(sparkSession: SparkSession, path: String): Dataset[Row] ={
 
-    val test = ImportCSV.run(sparkSession, path)
+    val allSeason = ImportCSV.run(sparkSession, path)
 
-    val test2 = test
-      .filter(col("HomeTeam").equalTo("Lille"))
-      .filter(col("B365H").equalTo("2.1"))
-      .filter(!col("AwayTeam").equalTo("Paris SG"))
+    val bestTeams = allSeason
+      .filter(col("FTHG") - col("FTAG") >= 4)
+      .filter(col("HTHG") - col("HTAG") > 1)
+      .filter(col("HTR").equalTo("H"))
 
-    test2.show()
+    bestTeams.printSchema()
+    bestTeams.show()
+    bestTeams
   }
-
 }
