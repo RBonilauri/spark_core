@@ -1,7 +1,5 @@
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.col
-
 
 object Main {
 
@@ -25,6 +23,5 @@ object Main {
     println("Data transformation... \n")
     TransformData.getBestTeams(spark, path)
     println("Done. \n")
-
   }
 }
