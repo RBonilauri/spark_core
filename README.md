@@ -1,3 +1,5 @@
+# Spark Core
+
 Quelles sont les 5 meilleures équipes de ces 5 saisons en ligue 1 ?
 
 Est ce que les cotes sont revelatrices des resultats des matchs ?
@@ -7,9 +9,10 @@ Le rapport entre buts encaissés et victoire / défaite / nul
 Moyennes
 
 Définir meilleurs selon critères --> but exterieur et domicile, taux de victoire / défaite
---> Faire meilleur parmis les meilleurs
 
-Data displays several attributes (full documentation) :
+Faire meilleur parmis les meilleurs
+
+# Data displays several attributes (full documentation) :
 
     Div = League Division
     Date = Match Date (dd/mm/yy)
@@ -22,7 +25,7 @@ Data displays several attributes (full documentation) :
     HTAG = Half Time Away Team Goals
     HTR = Half Time Result (H=Home Win, D=Draw, A=Away Win)
 
-Match Statistics (where available)
+# Match Statistics (where available)
 
     HS = Home Team Shots
     AS = Away Team Shots
