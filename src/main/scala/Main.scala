@@ -19,6 +19,7 @@ object Main {
 
     val path = "C:/Users/33660/Documents/ESGI_4A/Spark_core/Projet/data/"
     var selectedTeam: String = ""
+    var selectedOption: String = ""
     val allTeams = TransformData.getAllTeams(spark, path)
 
     println("## Import of dataset from CSV ## \n")
@@ -38,5 +39,7 @@ object Main {
     }
 
     TransformData.average(spark, path, selectedTeam)
+
+    println("Ranking of the best teams")
   }
 }
