@@ -1,6 +1,7 @@
 import org.apache.spark
 import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types.StringType
 
 import scala.collection.mutable.ListBuffer
 
@@ -20,15 +21,13 @@ object TransformData {
    * Function that creates a list with the names of the teams
    * Return a list of teams
    */
-  def getAllTeams(sparkSession: SparkSession, path: String): List[Any] = {
+  def getAllTeams(sparkSession: SparkSession, path: String): Dataset[Row] = {
 
     val allSeason = getAllSeasons(sparkSession, path)
 
     val allTeams = allSeason.select("AwayTeam")
       .distinct()
-      .collect()
-      .map(_(0))
-      .toList
+      .withColumnRenamed("AwayTeam", "Teams")
 
     allTeams
   }
@@ -135,13 +134,18 @@ object TransformData {
   /*
    * Function to obtain the 5 best teams
    */
-  def getBestTeams(sparkSession: SparkSession, path: String) = {
+  def getBestTeams(sparkSession: SparkSession, path: String): Dataset[Row] = {
 
     println("======================== BEST TEAMS ========================")
 
     val allTeams = getAllTeams(sparkSession, path)
 
-    for (team <- allTeams if getRatio(sparkSession, path, team.toString) > 0)
-      println(s"$team : ${getRatio(sparkSession, path, team.toString)}")
+    val allTeamsWithRatio: Dataset[Row] = allTeams
+      .withColumn("Ratio", col("Teams"))
+
+//      .map(team => getRatio(sparkSession, path, team.toString()))
+//      .withColumn("Ratio", col("Teams") as)
+
+    allTeamsWithRatio
   }
 }

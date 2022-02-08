@@ -1,5 +1,7 @@
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.catalyst.dsl.expressions.StringToAttributeConversionHelper
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
+import org.apache.spark.sql.functions._
 
 import scala.Console.println
 import scala.io.StdIn.readLine
@@ -19,7 +21,7 @@ object Main {
 
     val path = "C:/Users/33660/Documents/ESGI_4A/Spark_core/Projet/data/"
     var selectedTeam: String = ""
-    val allTeams = TransformData.getAllTeams(spark, path)
+    val allTeams: Dataset[Row] = TransformData.getAllTeams(spark, path)
 
     println("## Import of dataset from CSV ## \n")
     ImportCSV.run(spark, path)
@@ -30,17 +32,36 @@ object Main {
     println("Select a Team")
     selectedTeam = readLine()
 
+    var testSelectedTeam: Dataset[Row] = allTeams
+      .filter(col("Teams")
+        .contains(selectedTeam))
+
+    var countSelectedTeam = testSelectedTeam.count()
+
     // Vérifie que l'équipe choisie est bien orthographié et dans la liste des équipe
-    while (!allTeams.contains(selectedTeam)){
+    while (countSelectedTeam == 0){
       println("Select a correct team")
-      println(allTeams)
+      allTeams.show()
       selectedTeam = readLine()
+
+      var testSelectedTeam: Dataset[Row] = allTeams
+        .filter(col("Teams")
+          .contains(selectedTeam))
+
+      countSelectedTeam = testSelectedTeam.count()
     }
 
     TransformData.statistics(spark, path, selectedTeam)
 
     println(s"$selectedTeam ratio : ${TransformData.getRatio(spark, path, selectedTeam)}")
 
-    TransformData.getBestTeams(spark, path)
+    val allTeamsWithRatio = TransformData.getBestTeams(spark, path)
+
+//    allTeamsWithZero.show()
+
+//    val allTeamsWithRatio = allTeamsWithZero
+//      .withColumn("Ratio", TransformData.getRatio(spark, path, col("Teams").toString()))
+
+    allTeamsWithRatio.show()
   }
 }
