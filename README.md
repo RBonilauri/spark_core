@@ -1,17 +1,5 @@
 # Spark Core
 
-Quelles sont les 5 meilleures équipes de ces 5 saisons en ligue 1 ?
-
-Est ce que les cotes sont revelatrices des resultats des matchs ?
-
-Le rapport entre buts encaissés et victoire / défaite / nul
-
-Moyennes
-
-Définir meilleurs selon critères --> but exterieur et domicile, taux de victoire / défaite
-
-Faire meilleur parmis les meilleurs
-
 # Data displays several attributes (full documentation) :
 
     Div = League Division

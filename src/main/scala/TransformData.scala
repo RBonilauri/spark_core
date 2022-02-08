@@ -1,9 +1,7 @@
-import org.apache.spark
 import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.StringType
 
-import scala.collection.mutable.ListBuffer
+import scala.Console.in
 
 object TransformData {
 
@@ -19,7 +17,7 @@ object TransformData {
 
   /*
    * Function that creates a list with the names of the teams
-   * Return a list of teams
+   * Return a dataset of teams
    */
   def getAllTeams(sparkSession: SparkSession, path: String): Dataset[Row] = {
 
@@ -131,21 +129,23 @@ object TransformData {
     averageRatio
   }
 
-  /*
-   * Function to obtain the 5 best teams
-   */
-  def getBestTeams(sparkSession: SparkSession, path: String): Dataset[Row] = {
+  def numberVictory(sparkSession: SparkSession, path: String, teamName: String): Double = {
 
-    println("======================== BEST TEAMS ========================")
+    val allSeason = getAllSeasons(sparkSession, path)
 
-    val allTeams = getAllTeams(sparkSession, path)
+    val homeTeamSelected = allSeason
+      .filter(col("HomeTeam").equalTo(teamName))
+      .filter(col("FTR").equalTo("H"))
 
-    val allTeamsWithRatio: Dataset[Row] = allTeams
-      .withColumn("Ratio", col("Teams"))
+    val totalHT = homeTeamSelected.count()
 
-//      .map(team => getRatio(sparkSession, path, team.toString()))
-//      .withColumn("Ratio", col("Teams") as)
 
-    allTeamsWithRatio
+    val awayTeamSelected = allSeason
+      .filter(col("AwayTeam").equalTo(teamName))
+      .filter(col("FTR").equalTo("A"))
+
+    val totalAT = awayTeamSelected.count()
+
+    totalHT + totalAT
   }
 }

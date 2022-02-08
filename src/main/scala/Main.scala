@@ -55,13 +55,8 @@ object Main {
 
     println(s"$selectedTeam ratio : ${TransformData.getRatio(spark, path, selectedTeam)}")
 
-    val allTeamsWithRatio = TransformData.getBestTeams(spark, path)
+    val totalVictory = TransformData.numberVictory(spark, path, selectedTeam)
 
-//    allTeamsWithZero.show()
-
-//    val allTeamsWithRatio = allTeamsWithZero
-//      .withColumn("Ratio", TransformData.getRatio(spark, path, col("Teams").toString()))
-
-    allTeamsWithRatio.show()
+    print(s"$selectedTeam win $totalVictory times in total")
   }
 }
